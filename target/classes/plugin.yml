@@ -1,0 +1,19 @@
+name: testbukkitplugin
+main: me.joshhigginbottom.testbukkitplugin
+version: 1
+softdepend: ['Multiverse-Core']
+commands:
+   whereami:
+      description: Logs the location of the executing player to the console
+      usage: /whereami
+      permission: testbukkitplugin.whereami
+      permission-message: You don't have testbukkitplugin.whereami
+   testdebug:
+      description: Debug command for various things
+      usage: /testdebug
+      permission: testbukkitplugin.testdebug
+      permission-message: You don't have testbukkitplugin.testdebug
+permissions:
+  testbukkitplugin.whereami:
+    description: Gives access to the whereami command
+    default: true
