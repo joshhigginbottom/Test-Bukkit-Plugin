@@ -1,5 +1,8 @@
 package me.joshhigginbottom;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import org.bukkit.Bukkit;
@@ -79,17 +82,20 @@ public final class testbukkitplugin extends JavaPlugin implements Listener
 
             Sheep sheep = (Sheep)getEntityAtLocation(dispenserLocation, EntityType.SHEEP);
 
-            getServer().broadcastMessage(event.getItem().getType().toString());
-            if(event.getItem().getType() == Material.INK_SAC){
-                getServer().broadcastMessage("Item is Dye");
-                getServer().broadcastMessage(String.valueOf(event.getItem().getDurability()));
-                Dye dye = (Dye)event.getItem().getData();
-                sheep.setColor(dye.getColor());
-            }
+            Map<String, Object> map = event.getItem().serialize();
+            String color = map.get("type").toString().replace("_DYE","").replace("LEGACY_", "");
+            getServer().broadcastMessage(color);
+            DyeColor dyeColor = DyeColor.valueOf(color);
 
             if (sheep != null){
                 getServer().broadcastMessage("Sheep is not null");
-                
+                sheep.setColor(dyeColor);
+                getServer().broadcastMessage(map.get("type").toString().replace("LEGACY_", ""));
+                Material dyeMaterial = event.getItem().getType();
+                getServer().broadcastMessage(dyeMaterial.name());
+                getServer().broadcastMessage(dispenser.getInventory().getItem(1).getType().name());
+                dispenser.getInventory().remove(new ItemStack(dyeMaterial,1));
+                event.setCancelled(true);
             }
         }
     }
@@ -97,11 +103,11 @@ public final class testbukkitplugin extends JavaPlugin implements Listener
     public Entity getEntityAtLocation(Location location, EntityType entityType){
         for (Entity entity : location.getChunk().getEntities()){
             if (entity.getType() == entityType){
-                getServer().broadcastMessage(entity.getType() + " ||| " + entityType.toString() + " ||| " 
+                /*getServer().broadcastMessage(entity.getType() + " ||| " + entityType.toString() + " ||| " 
                                             + Math.floor(entity.getLocation().getX()) + " ||| " 
                                             + Math.floor(entity.getLocation().getY()) + " ||| " 
                                             + Math.floor(entity.getLocation().getZ()));
-                getServer().broadcastMessage(location.getX() + " ||| " + location.getY() + " ||| " + location.getZ());
+                getServer().broadcastMessage(location.getX() + " ||| " + location.getY() + " ||| " + location.getZ());*/
                 if (Math.floor(entity.getLocation().getX()) == location.getX() && 
                     Math.floor(entity.getLocation().getY()) == location.getY() &&
                     Math.floor(entity.getLocation().getZ()) == location.getZ()){
